@@ -1,0 +1,161 @@
+C51 COMPILER V9.60.0.0   CDL                                                               12/23/2021 17:03:38 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CDL
+OBJECT MODULE PLACED IN .\Objects\cdl.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE cdl.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\cdl.lst
+                    -) OBJECT(.\Objects\cdl.obj)
+
+line level    source
+
+   1          #include "lcd.h"
+   2          #include <REG52.H>
+   3          /*******************************************************************************
+   4          * ? ? ?         : Lcd1602_Delay1ms
+   5          * ????             : ????,??1ms
+   6          * ?    ?         : c
+   7          * ?    ?         : ?
+   8          * ?    ?         : ?????12MHZ???,12?????????
+   9          *******************************************************************************/
+  10          
+  11          void Lcd1602_Delay1ms(uint c)   //?? 0us
+  12          {
+  13   1          uchar a,b;
+  14   1              for (; c>0; c--)
+  15   1              {
+  16   2                       for (b=199;b>0;b--)
+  17   2                       {
+  18   3                              for(a=1;a>0;a--);
+  19   3                       }      
+  20   2              }
+  21   1              
+  22   1      }
+  23          
+  24          /*******************************************************************************
+  25          * ? ? ?         : LcdWriteCom
+  26          * ????             : ?LCD?????????
+  27          * ?    ?         : com
+  28          * ?    ?         : ?
+  29          *******************************************************************************/
+  30          #ifndef         LCD1602_4PINS    //???????LCD1602_4PINS?
+  31          void LcdWriteCom(uchar com)       //????
+  32          {
+  33   1              LCD1602_E = 0;     //??
+  34   1              LCD1602_RS = 0;    //??????
+  35   1              LCD1602_RW = 0;    //????
+  36   1              
+  37   1              LCD1602_DATAPINS = com;     //????
+  38   1              Lcd1602_Delay1ms(1);            //??????
+  39   1      
+  40   1              LCD1602_E = 1;            //????
+  41   1              Lcd1602_Delay1ms(5);      //????
+  42   1              LCD1602_E = 0;
+  43   1      }
+  44          #else 
+              void LcdWriteCom(uchar com)       //????
+              {
+                      LCD1602_E = 0;   //????
+                      LCD1602_RS = 0;  //??????
+                      LCD1602_RW = 0;  //????
+              
+                      LCD1602_DATAPINS = com; //??4???????P0?????,??????????
+                      Lcd1602_Delay1ms(1);
+              
+                      LCD1602_E = 1;   //????
+C51 COMPILER V9.60.0.0   CDL                                                               12/23/2021 17:03:38 PAGE 2   
+
+                      Lcd1602_Delay1ms(5);
+                      LCD1602_E = 0;
+              
+                      LCD1602_DATAPINS = com << 4; //?????
+                      Lcd1602_Delay1ms(1);
+              
+                      LCD1602_E = 1;   //????
+                      Lcd1602_Delay1ms(5);
+                      LCD1602_E = 0;
+              }
+              #endif
+  66          /*******************************************************************************
+  67          * ? ? ?         : LcdWriteData
+  68          * ????             : ?LCD?????????
+  69          * ?    ?         : dat
+  70          * ?    ?         : ?
+  71          *******************************************************************************/                   
+  72          #ifndef         LCD1602_4PINS              
+  73          void LcdWriteData(uchar dat)                    //????
+  74          {
+  75   1              LCD1602_E = 0;  //????
+  76   1              LCD1602_RS = 1; //??????
+  77   1              LCD1602_RW = 0; //????
+  78   1      
+  79   1              LCD1602_DATAPINS = dat; //????
+  80   1              Lcd1602_Delay1ms(1);
+  81   1      
+  82   1              LCD1602_E = 1;   //????
+  83   1              Lcd1602_Delay1ms(5);   //????
+  84   1              LCD1602_E = 0;
+  85   1      }
+  86          #else
+              void LcdWriteData(uchar dat)                    //????
+              {
+                      LCD1602_E = 0;    //????
+                      LCD1602_RS = 1;   //??????
+                      LCD1602_RW = 0;   //????
+              
+                      LCD1602_DATAPINS = dat; //??4???????P0?????,??????????
+                      Lcd1602_Delay1ms(1);
+              
+                      LCD1602_E = 1;    //????
+                      Lcd1602_Delay1ms(5);
+                      LCD1602_E = 0;
+              
+                      LCD1602_DATAPINS = dat << 4; //?????
+                      Lcd1602_Delay1ms(1);
+              
+                      LCD1602_E = 1;    //????
+                      Lcd1602_Delay1ms(5);
+                      LCD1602_E = 0;
+              }
+              #endif
+ 108          /*******************************************************************************
+ 109          * ? ? ?       : LcdInit()
+ 110          * ????           : ???LCD?
+ 111          * ?    ?       : ?
+ 112          * ?    ?       : ?
+ 113          *******************************************************************************/                   
+ 114          #ifndef         LCD1602_4PINS
+ 115          void LcdInit()                                            //LCD??????
+ 116          {
+C51 COMPILER V9.60.0.0   CDL                                                               12/23/2021 17:03:38 PAGE 3   
+
+ 117   1              LcdWriteCom(0x38);  //???
+ 118   1              LcdWriteCom(0x0c);  //????????
+ 119   1              LcdWriteCom(0x06);  //??????1
+ 120   1              LcdWriteCom(0x01);  //??
+ 121   1              LcdWriteCom(0x80);  //????????
+ 122   1      }
+ 123          #else
+              void LcdInit()                                            //LCD??????
+              {
+                      LcdWriteCom(0x32);       //?8?????4???
+                      LcdWriteCom(0x28);       //?????????
+                      LcdWriteCom(0x0c);  //????????
+                      LcdWriteCom(0x06);  //??????1
+                      LcdWriteCom(0x01);  //??
+                      LcdWriteCom(0x80);  //????????
+              }
+              #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    109    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

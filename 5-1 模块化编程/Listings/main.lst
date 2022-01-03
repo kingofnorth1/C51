@@ -1,0 +1,40 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              12/21/2021 22:02:34 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+*** WARNING C315 IN LINE 2 OF Delay.h: unknown #directive 'defind'
+   3          #include "Nixie.h"
+*** WARNING C315 IN LINE 2 OF Nixie.h: unknown #directive 'defind'
+   4          
+   5          void main(){
+   6   1              while(1){
+   7   2                      Nixie(1,1);
+   8   2                      Nixie(2,2);
+   9   2                      Nixie(3,3);
+  10   2                      Nixie(4,4);
+  11   2                      Nixie(8,8);
+  12   2                      Nixie(7,8);
+  13   2              }
+  14   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     56    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
